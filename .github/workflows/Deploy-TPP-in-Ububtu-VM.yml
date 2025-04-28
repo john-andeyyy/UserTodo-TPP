@@ -1,0 +1,67 @@
+name: auto deploy TPP in Ubuntu VM
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy-tpp:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Delete UserTodo-TPP folder and clone the repository
+        run: |
+          rm -rf ~/Desktop/UserTodo-TPP
+          git clone https://github.com/john-andeyyy/UserTodo-TPP.git ~/Desktop/UserTodo-TPP
+
+      - name: Stop the UserTodo-TPP service (if running)
+        run: |
+          sudo systemctl stop UserTodo-TPP.service || true  # Stop if already running
+
+      - name: (Re)create systemd service file
+        run: |
+          sudo bash -c 'cat <<EOF > /etc/systemd/system/UserTodo-TPP.service
+          [Unit]
+          Description=User Service .NET App
+          After=network.target
+
+          [Service]
+          WorkingDirectory=/home/vboxuser/Desktop/UserTodo-TPP
+          ExecStart=/usr/bin/dotnet /home/vboxuser/Desktop/UserTodo-TPP/bin/Debug/net8.0/mtdg-tpp.dll
+          Restart=always
+          RestartSec=5
+          KillSignal=SIGINT
+          SyslogIdentifier=UserTodo-TPP
+          User=vboxuser
+          Environment=ASPNETCORE_ENVIRONMENT=Development
+          Environment=HOST=${{secrets.HOST}}
+          Environment=PORT=${{secrets.PORT}}
+          Environment=DB_PORT=3306
+          Environment=DB_HOST=localhost
+          Environment=DB_NAME=${{secrets.DB_NAME}}
+          Environment=DB_USER=${{secrets.DB_USER}}
+          Environment=DB_PASS=${{secrets.DB_PASS}}
+          Environment=EXPIRATION_SECONDS=3600
+
+          [Install]
+          WantedBy=multi-user.target
+          EOF'
+
+          sudo systemctl daemon-reload
+          sudo systemctl enable UserTodo-TPP
+          sudo systemctl start UserTodo-TPP
+
+      - name: Restore dependencies and build the project
+        run: |
+          cd ~/Desktop/UserTodo-TPP
+          dotnet restore
+          dotnet build
+
+      - name: Restart the mtdg-tpp.dll service
+        run: |
+          sudo systemctl restart UserTodo-TPP.service
+
+      - name: Mark build and deployment as completed
+        run: echo "Build and deployment completed successfully!"
