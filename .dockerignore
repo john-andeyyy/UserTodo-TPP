@@ -1,0 +1,9 @@
+Makefile
+Dockerfile
+bin/
+obj/
+*.db
+.vs
+Properties/launchSettings.json
+*.json
+.makerc

@@ -1,0 +1,12 @@
+bin/
+obj/
+*.db
+.vs
+Properties/launchSettings.json
+*.json
+
+Properties/PublishProfiles/FolderProfile 1.pubxml
+Properties/PublishProfiles/FolderProfile 2.pubxml
+Properties/PublishProfiles/FolderProfile 3.pubxml
+Properties/PublishProfiles/FolderProfile 4.pubxml
+konnect_transaction_service.csproj
