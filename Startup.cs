@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using FluentMigrator.Runner;
 using System.Reflection;
 using MySql.Data.MySqlClient;
+using Microsoft.AspNetCore.Http;
 
 namespace Notification
 {
@@ -198,6 +199,10 @@ namespace Notification
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGet("/", async context =>
+                {
+                    await context.Response.WriteAsync("Welcome to User TPP");
+                });
             });
         }
 
