@@ -3,7 +3,6 @@ obj/
 *.db
 .vs
 
-*.json
 
 Properties/PublishProfiles/FolderProfile 1.pubxml
 Properties/PublishProfiles/FolderProfile 2.pubxml
