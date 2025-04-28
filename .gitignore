@@ -2,7 +2,7 @@ bin/
 obj/
 *.db
 .vs
-Properties/launchSettings.json
+
 *.json
 
 Properties/PublishProfiles/FolderProfile 1.pubxml
