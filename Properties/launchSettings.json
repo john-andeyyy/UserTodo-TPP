@@ -11,7 +11,7 @@
                 "DB_USER": "root",
                 "DB_PASS": "Andrei_123!",
                 "HOST": "localhost",
-                "PORT": "5000"
+                "PORT": "5050"
             },
             "applicationUrl": "https://localhost:57782;http://localhost:57783"
         }
